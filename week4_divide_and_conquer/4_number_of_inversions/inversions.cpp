@@ -1,25 +1,52 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+using namespace std;
 
-using std::vector;
-
-long long get_number_of_inversions(vector<int> &a, vector<int> &b, size_t left, size_t right) {
-  long long number_of_inversions = 0;
-  if (right <= left + 1) return number_of_inversions;
-  size_t ave = left + (right - left) / 2;
-  number_of_inversions += get_number_of_inversions(a, b, left, ave);
-  number_of_inversions += get_number_of_inversions(a, b, ave, right);
+vector<int> fast_count_segments(vector<pair<int,int>> &v,vector<int> points) {
+  vector<int> cnt(points.size());
   //write your code here
-  return number_of_inversions;
-}
-
-int main() {
-  int n;
-  std::cin >> n;
-  vector<int> a(n);
-  for (size_t i = 0; i < a.size(); i++) {
-    std::cin >> a[i];
+  int n1=v.size(),n2=points.size(),i=0,j=0,k;
+  for(i=0;i<n2;i++)
+  {
+    k=0;
+    for(j=0;j<n1;j++)
+    {
+      if(points[i]>=v[j].first && points[i]<=v[j].second)
+        k++;
+      else if(points[i]<v[j].first)
+        j=n1;
+    }
+    cnt[i] = k;
   }
-  vector<int> b(a.size());
-  std::cout << get_number_of_inversions(a, b, 0, a.size()) << '\n';
+
+  return cnt;
+}
+vector<int> naive_count_segments(vector<int> starts, vector<int> ends, vector<int> points) {
+  vector<int> cnt(points.size());
+  for (size_t i = 0; i < points.size(); i++) {
+    for (size_t j = 0; j < starts.size(); j++) {  
+      cnt[i] += starts[j] <= points[i] && points[i] <= ends[j];
+    }
+  }
+  return cnt;
+}
+int main() {
+  int n, m,a,b;
+  std::cin >> n >> m;
+  std::vector<pair<int,int>> v;
+  for(auto i =0;i<n;i++)
+  {
+    cin>>a>>b;
+    v.push_back(make_pair(a,b));
+  }
+  vector<int> points(m);
+  for (auto i = 0; i < points.size(); i++) {
+    std::cin >> points[i];
+  }
+  sort(v.begin(),v.end());
+  vector<int> cnt = naive_count_segments(v, points);
+  for (size_t i = 0; i < cnt.size(); i++) {
+    std::cout << cnt[i] << ' ';
+  }
 }

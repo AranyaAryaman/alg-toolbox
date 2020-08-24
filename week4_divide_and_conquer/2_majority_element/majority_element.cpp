@@ -1,22 +1,46 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
+#include<bits/stdc++.h>
+#define int long long 
+#define endl '\n'
+using namespace std;
 
-using std::vector;
+int bin(int q,int n,int arr[]){
+    int l = 0;
+    int r = n-1;
+    while(l<=r){
+        int mid = floor(l+(r-l)/2);
+        if(arr[mid]==q)
+            return mid;
 
-int get_majority_element(vector<int> &a, int left, int right) {
-  if (left == right) return -1;
-  if (left + 1 == right) return a[left];
-  //write your code here
-  return -1;
+        else if(arr[mid]<q)
+            l = mid+1;
+        else
+            r = mid-1;
+    }
+
+    return -1;
 }
 
-int main() {
-  int n;
-  std::cin >> n;
-  vector<int> a(n);
-  for (size_t i = 0; i < a.size(); ++i) {
-    std::cin >> a[i];
-  }
-  std::cout << (get_majority_element(a, 0, a.size()) != -1) << '\n';
+
+int32_t main(){
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++)
+        cin>>a[i];
+
+    int k;
+    cin>>k;
+    int b[k];
+    for(int i=0;i<k;i++)
+        cin>>b[i];
+
+    vector<int> v;
+
+    for(int i=0;i<k;i++){
+        v.push_back(bin(b[i],n,a));
+    }
+
+    for(int s:v)
+        cout<<s<<" ";
+    return 0;
 }
